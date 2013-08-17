@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script src="/d3.v3.min.js" charset="utf-8"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+svg {
+  font-size: 10px;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke-width: .5px;
+}
+
+.x.axis path {
+  stroke: #000;
+}
+
+.x.axis line {
+  stroke: #fff;
+  stroke-opacity: .5;
+}
+
+.y.axis line {
+  stroke: #ddd;
+}
+
+path.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+rect.pane {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="vis"></div>
+      <div id="footer">
+        <span>…</span>
+        <div class="hint">mousewheel to zoom, drag to pan</div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+      var width  = 900;
+      var height = 600;
+
+      var vis = d3.select("#vis").append("svg")
+          .attr("width", width).attr("height", height)
+
+      d3.json("tl_2012_39095.json", function(json) {
+          // create a first guess for the projection
+          var center = d3.geo.centroid(json)
+          var scale  = 150;
+          var offset = [width/2, height/2];
+          var projection = d3.geo.mercator().scale(scale).center(center)
+              .translate(offset);
+
+          // create the path
+          var path = d3.geo.path().projection(projection);
+
+          // using the path determine the bounds of the current map and use
+          // these to determine better values for the scale and translation
+          var bounds  = path.bounds(json);
+          var hscale  = scale*width  / (bounds[1][0] - bounds[0][0]);
+          var vscale  = scale*height / (bounds[1][1] - bounds[0][1]);
+          var scale   = (hscale < vscale) ? hscale : vscale;
+          var offset  = [width - (bounds[0][0] + bounds[1][0])/2,
+                            height - (bounds[0][1] + bounds[1][1])/2];
+
+          // new projection
+          projection = d3.geo.mercator().center(center)
+            .scale(scale).translate(offset);
+          path = path.projection(projection);
+
+          // add a rectangle to see the bound of the svg
+          vis.append("rect").attr('width', width).attr('height', height)
+            .style('stroke', 'black').style('fill', 'none');
+
+          vis.selectAll("path").data(json.features).enter().append("path")
+            .attr("d", path)
+            .style("stroke-width", "1")
+            .style("stroke", "black")
+        });
+    </script>
+  </body>
+</html>
