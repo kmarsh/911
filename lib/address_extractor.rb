@@ -1,7 +1,7 @@
-require './address_match'
-require './intersection_match'
-require './block_match'
-require './null_match'
+require 'address_match'
+require 'intersection_match'
+require 'block_match'
+require 'null_match'
 
 # Attempts to extract a location from semi-free form string
 class AddressExtractor
