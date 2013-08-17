@@ -1,4 +1,6 @@
+$: << "../lib"
 require "minitest/autorun"
+require "address_extractor"
 
 class TestAddressExtractor < Minitest::Test
   def test_with_address
