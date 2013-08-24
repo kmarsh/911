@@ -6,6 +6,15 @@ class Coordinate
     @latitude = latitude
   end
 
+  def to_s
+    "#{longitude}, #{latitude}"
+  end
+
+  def self.from_wkt(string)
+    raise ArgumentError.new("`#{string}` not in POINT WKT format") unless string.match(/^POINT\(([-\d.]+) ([-\d.]+)\)$/)
+    new($1.to_f, $2.to_f)
+  end
+
   # This uses the 'haversine' formula to calculate the great-circle distance
   # between two points-that is, the shortest distance over the earth’s surface
   # giving an 'as-the-crow-flies' distance between the points.

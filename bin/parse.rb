@@ -2,7 +2,7 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'sqlite3'
+require 'pg'
 require 'oj'
 # http://www.scribekey.com/EntityAttributes/EDGES.html
 # STATEFP: 39
@@ -37,7 +37,14 @@ require 'oj'
 # TNIDF: 96263424, 96251298, 96263452, 409284779, 96263479, 409283476, 96263448, 96266425, 96266424, 96263578
 # TNIDT: 96263422, 96250934, 96263453, 409284798, 96263574, 96263439, 96263506, 96263454, 96269952, 96266425
 
-db = SQLite3::Database.new( "data/roads.db" )
+conn = PG.connect()
+# conn.exec("SELECT * FROM roads") do |result|
+#   result.each do |row|
+#     puts row['fullname']
+#   end
+# end
+
+# exit 1
 
 h2 = Oj.load(ARGF)
 h2['features'].each do |feature|
@@ -45,14 +52,16 @@ h2['features'].each do |feature|
 
   next if properties['FULLNAME'].to_s.strip == ""
 
-  puts feature['geometry']['coordinates'].to_s
+  linestring = feature['geometry']['coordinates'].map{|c| c.join(' ') }.join(', ')
 
-  db.execute("INSERT INTO roads (TLID, FULLNAME, LFROMADD, LTOADD, RFROMADD, RTOADD, LINESTRING) VALUES (?, ?, ?, ?, ?, ?, ?)",
-              properties['TLID'],
-              properties['FULLNAME'],
-              properties['LFROMADD'],
-              properties['LTOADD'],
-              properties['RFROMADD'],
-              properties['RTOADD'],
-              feature['geometry']['coordinates'].to_s)
+  # puts feature['geometry']['coordinates'].to_s
+  # conn.exec_params("INSERT INTO roads (TLID, FULLNAME, LFROMADD, LTOADD, RFROMADD, RTOADD, LINESTRING) VALUES (?, ?, ?, ?, ?, ?, ?)",[properties['FULLNAME']])
+  conn.exec_params("INSERT INTO roads (TLID, FULLNAME, LFROMADD, LTOADD, RFROMADD, RTOADD, geom) VALUES ($1, $2, $3, $4, $5, $6, ST_GeomFromText($7))",
+                   [properties['TLID'],
+                   properties['FULLNAME'],
+                   properties['LFROMADD'],
+                   properties['LTOADD'],
+                   properties['RFROMADD'],
+                   properties['RTOADD'],
+                   "LINESTRING(#{linestring})"])
 end

@@ -1,16 +1,24 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    awesome_print (1.1.0)
     minitest (5.0.6)
     oj (2.1.4)
+    pg (0.16.0)
     rake (10.0.3)
+    sequel (4.1.1)
     sqlite3 (1.3.8)
+    terminal-table (1.4.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   minitest (~> 5.0.0)
   oj
+  pg
   rake (~> 10.0.0)
+  sequel
   sqlite3
+  terminal-table

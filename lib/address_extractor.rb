@@ -1,12 +1,17 @@
+require 'core_ext'
 require 'address_match'
 require 'intersection_match'
 require 'block_match'
 require 'null_match'
 require 'coordinate'
+require 'pg'
+require 'sequel'
+require 'awesome_print'
+
+DB = Sequel.connect('postgres://localhost/kmarsh')
 
 # Attempts to extract a location from semi-free form string
 class AddressExtractor
-
   STREET_SUFFIXES = /st|ave|rd|ct|dr|hwy|blvd|ln/
 
   def initialize(string)

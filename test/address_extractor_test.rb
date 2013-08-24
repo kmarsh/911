@@ -7,6 +7,7 @@ class TestAddressExtractor < Minitest::Test
     assert_equal AddressMatch.new("4945", "dorr st"), AddressExtractor.new("TPD - loud music complaint, mulvaney's at 4945 dorr st").extract
     assert_equal AddressMatch.new("629", "locust st"), AddressExtractor.new("TFD - engine 3 also enroute to the 629 locust st, vistula heritage, report of a person injured in a fourth floor apt").extract
     assert_equal AddressMatch.new("324", "s detroit ave"), AddressExtractor.new("TFD - injuries from an assault, 324 s detroit ave, assist police on scene, engine 21's company").extract
+    assert_equal AddressMatch.new("3730", "monroe st"), AddressExtractor.new("TPD/TFD - injuries from an assault, 3730 monroe st at the stop & go, with engine 17's company").extract
   end
 
   def test_with_block
