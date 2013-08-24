@@ -1,3 +1,7 @@
 language: ruby
 rvm:
   - 2.0.0
+before_script:
+  - psql -c 'create database 911;' -U postgres
+env:
+  - DB=postgres://localhost/911

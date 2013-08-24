@@ -8,7 +8,7 @@ require 'pg'
 require 'sequel'
 require 'awesome_print'
 
-DB = Sequel.connect('postgres://localhost/kmarsh')
+DB = Sequel.connect(ENV['DB'] || 'postgres://localhost/kmarsh')
 
 # Attempts to extract a location from semi-free form string
 class AddressExtractor
