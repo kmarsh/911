@@ -2,6 +2,6 @@ language: ruby
 rvm:
   - 2.0.0
 before_script:
-  - psql -c 'create database nine_one_one;' -U postgres
+  - psql -c 'create database nine_one_one; \c nine_one_one; create extension postgis;' -U postgres
 env:
   - DB=postgres://localhost/nine_one_one
