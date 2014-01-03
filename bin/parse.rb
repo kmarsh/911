@@ -46,7 +46,7 @@ conn = PG.connect()
 
 # exit 1
 
-h2 = Oj.load(ARGF)
+h2 = Oj.load(ARGF.read)
 h2['features'].each do |feature|
   properties = feature['properties']
 

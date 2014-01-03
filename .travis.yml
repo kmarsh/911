@@ -4,5 +4,7 @@ rvm:
 before_script:
   - psql -c 'create database nine_one_one' -U postgres
   - psql -c 'create extension postgis;' -U postgres nine_one_one
+  - psql < fixtures/schema.sql -U postgres nine_one_one
+  - gzcat fixtures/tl_2012_39095.json.gz | ruby bin/parse.rb
 env:
   - DB=postgres://localhost/nine_one_one
