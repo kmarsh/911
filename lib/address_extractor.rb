@@ -19,11 +19,11 @@ class AddressExtractor
   end
 
   def extract
-    if @string.match(/(\d+) block ([A-z ]+) (#{STREET_SUFFIXES})/i)
+    if @string.match(/(\d+) block ([A-z ]+?) (#{STREET_SUFFIXES})/i)
       return BlockMatch.new($1, "#{$2} #{$3}")
-    elsif @string.match(/(\d+) ([A-z ]+) (#{STREET_SUFFIXES})/i)
+    elsif @string.match(/(\d+) ([A-z ]+?) (#{STREET_SUFFIXES})/i)
       return AddressMatch.new($1, "#{$2} #{$3}")
-    elsif @string.match(/([A-z ]+) (#{STREET_SUFFIXES}) and ([A-z ]+)( #{STREET_SUFFIXES})?/i)
+    elsif @string.match(/([A-z ]+?) (#{STREET_SUFFIXES}) and ([A-z ]+?)( #{STREET_SUFFIXES})?/i)
       return IntersectionMatch.new("#{$1} #{$2}", "#{$3}#{$4}")
     else
       return NullMatch.new
