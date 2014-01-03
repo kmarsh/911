@@ -12,6 +12,7 @@ DB = Sequel.connect(ENV['DB'] || 'postgres://localhost/kmarsh')
 
 # Attempts to extract a location from semi-free form string
 class AddressExtractor
+  STREET_NAMES = /[A-z ]+?|[0-9]+(?:st|nd|rd|th){1}/
   STREET_SUFFIXES = /st|ave|rd|ct|dr|hwy|blvd|ln|pl|pkwy/
 
   def initialize(string)
@@ -19,11 +20,11 @@ class AddressExtractor
   end
 
   def extract
-    if @string.match(/(\d+) block ([A-z ]+?) (#{STREET_SUFFIXES})/i)
+    if @string.match(/(\d+) block (#{STREET_NAMES}) (#{STREET_SUFFIXES})/i)
       return BlockMatch.new($1, "#{$2} #{$3}")
-    elsif @string.match(/(\d+) ([A-z ]+?) (#{STREET_SUFFIXES})/i)
+    elsif @string.match(/(\d+) (#{STREET_NAMES}) (#{STREET_SUFFIXES})/i)
       return AddressMatch.new($1, "#{$2} #{$3}")
-    elsif @string.match(/([A-z ]+?) (#{STREET_SUFFIXES}) at|and|near ([A-z ]+?)( #{STREET_SUFFIXES})?/i)
+    elsif @string.match(/(#{STREET_NAMES}) (#{STREET_SUFFIXES}) at|and|near (#{STREET_NAMES})( #{STREET_SUFFIXES})?/i)
       return IntersectionMatch.new("#{$1} #{$2}", "#{$3}#{$4}")
     else
       return NullMatch.new
