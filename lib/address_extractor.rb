@@ -12,7 +12,7 @@ DB = Sequel.connect(ENV['DB'] || 'postgres://localhost/kmarsh')
 
 # Attempts to extract a location from semi-free form string
 class AddressExtractor
-  STREET_SUFFIXES = /st|ave|rd|ct|dr|hwy|blvd|ln|pl/
+  STREET_SUFFIXES = /st|ave|rd|ct|dr|hwy|blvd|ln|pl|pkwy/
 
   def initialize(string)
     @string = string
