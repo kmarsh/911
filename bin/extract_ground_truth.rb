@@ -11,7 +11,7 @@ CSV.open("data/extracted-#{Time.now.to_i}.csv", "wb") do |csv|
   CSV.parse(ARGF, headers: true) do |row|
     total_lines += 1
 
-    next if row['text'].match(/^@|RT|Toledo Scanner Daily/)
+    next if row['text'].match(/^@|RT|Toledo Scanner/)
     valid_lines += 1
 
     address_extractor = AddressExtractor.new(row['text'])
