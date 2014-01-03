@@ -23,7 +23,7 @@ class AddressExtractor
       return BlockMatch.new($1, "#{$2} #{$3}")
     elsif @string.match(/(\d+) ([A-z ]+?) (#{STREET_SUFFIXES})/i)
       return AddressMatch.new($1, "#{$2} #{$3}")
-    elsif @string.match(/([A-z ]+?) (#{STREET_SUFFIXES}) and ([A-z ]+?)( #{STREET_SUFFIXES})?/i)
+    elsif @string.match(/([A-z ]+?) (#{STREET_SUFFIXES}) and|near ([A-z ]+?)( #{STREET_SUFFIXES})?/i)
       return IntersectionMatch.new("#{$1} #{$2}", "#{$3}#{$4}")
     else
       return NullMatch.new

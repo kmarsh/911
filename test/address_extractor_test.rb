@@ -29,6 +29,7 @@ class TestAddressExtractor < Minitest::Test
     assert_equal IntersectionMatch.new("kent st", "page st"), AddressExtractor.new("TPD - security reporting group of unwanted males from apartments kent st and page st, heading out towards cherry st").extract
     assert_equal IntersectionMatch.new("water st", "n summit st"), AddressExtractor.new("do see that toledo fire and ems dispatched water rescue for water st and n summit st, owens corning area, sounds like downtown suspect").extract
     assert_equal IntersectionMatch.new("spencer st", "south ave"), AddressExtractor.new("TPD - a few gang unit crews out on a suspect stop at spencer st and south ave").extract
+    assert_equal IntersectionMatch.new("birmingham terrace", "consaul st"), AddressExtractor.new("TPD - disorder, birmingham terrace near consaul st, report of 5-6 people arguing").extract
   end
 
   def test_null_match
