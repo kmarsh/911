@@ -4,6 +4,8 @@ require 'bundler/setup'
 
 require 'pg'
 require 'oj'
+require 'zlib'
+
 # http://www.scribekey.com/EntityAttributes/EDGES.html
 # STATEFP: 39
 # COUNTYFP: 095
@@ -37,7 +39,7 @@ require 'oj'
 # TNIDF: 96263424, 96251298, 96263452, 409284779, 96263479, 409283476, 96263448, 96266425, 96266424, 96263578
 # TNIDT: 96263422, 96250934, 96263453, 409284798, 96263574, 96263439, 96263506, 96263454, 96269952, 96266425
 
-conn = PG.connect()
+conn = PG.connect(dbname: 'nine_one_one')
 # conn.exec("SELECT * FROM roads") do |result|
 #   result.each do |row|
 #     puts row['fullname']
@@ -46,7 +48,10 @@ conn = PG.connect()
 
 # exit 1
 
-h2 = Oj.load(ARGF.read)
+json = Zlib::GzipReader.new(ARGF).read
+
+h2 = Oj.load(json)
+
 h2['features'].each do |feature|
   properties = feature['properties']
 
