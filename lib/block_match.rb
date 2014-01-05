@@ -1,4 +1,4 @@
-class BlockMatch < Struct.new(:block, :street)
+BlockMatch = Struct.new(:block, :street) do
   def to_s
     "Block: #{block} #{street}"
   end

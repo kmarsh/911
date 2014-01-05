@@ -1,4 +1,4 @@
-class AddressMatch < Struct.new(:number, :street)
+AddressMatch = Struct.new(:number, :street) do
   def to_s
     "Address: #{number} #{street}"
   end

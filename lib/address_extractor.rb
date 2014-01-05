@@ -20,14 +20,16 @@ class AddressExtractor
   end
 
   def extract
-    if @string.match(/(\d+) block (#{STREET_NAMES}) (#{STREET_SUFFIXES})/i)
-      return BlockMatch.new($1, "#{$2} #{$3}")
-    elsif @string.match(/(\d+) (#{STREET_NAMES}) (#{STREET_SUFFIXES})/i)
-      return AddressMatch.new($1, "#{$2} #{$3}")
-    elsif @string.match(/(#{STREET_NAMES}) (#{STREET_SUFFIXES}) at|and|near (#{STREET_NAMES})( #{STREET_SUFFIXES})?/i)
-      return IntersectionMatch.new("#{$1} #{$2}", "#{$3}#{$4}")
+    case @string
+    when /(\d+) block (#{STREET_NAMES}) (#{STREET_SUFFIXES})/i
+      BlockMatch.new($1, "#{$2} #{$3}")
+    when /(\d+) (#{STREET_NAMES}) (#{STREET_SUFFIXES})/i
+      AddressMatch.new($1, "#{$2} #{$3}")
+    when /at|, ([A-z ]+?) (#{STREET_SUFFIXES}) (?:at|and|near) ([A-z ]+?) (#{STREET_SUFFIXES})/i
+      puts $.inspect
+      IntersectionMatch.new("#{$1} #{$2}".strip, "#{$3} #{$4}".strip)
     else
-      return NullMatch.new
+      NullMatch.new
     end
   end
 end
