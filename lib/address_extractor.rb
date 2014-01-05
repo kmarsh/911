@@ -26,7 +26,6 @@ class AddressExtractor
     when /(\d+) (#{STREET_NAMES}) (#{STREET_SUFFIXES})/i
       AddressMatch.new($1, "#{$2} #{$3}")
     when /at|, ([A-z ]+?) (#{STREET_SUFFIXES}) (?:at|and|near) ([A-z ]+?) (#{STREET_SUFFIXES})/i
-      puts $.inspect
       IntersectionMatch.new("#{$1} #{$2}".strip, "#{$3} #{$4}".strip)
     else
       NullMatch.new
