@@ -10,6 +10,15 @@ require 'awesome_print'
 
 DB = Sequel.connect(ENV['DB'] || 'postgres://localhost/kmarsh')
 
+# $road_words = []
+
+# DB["SELECT fullname FROM roads GROUP BY fullname"].each do |row|
+#   $road_words << row[:fullname].downcase.split(" ")
+#   # puts row[:fullname]
+# end
+
+# $road_words = road_words.flatten.uniq.sort - %w[a the and of]
+
 # Attempts to extract a location from semi-free form string
 class AddressExtractor
   STREET_NAMES = /[A-z ]+?|[0-9]+(?:st|nd|rd|th){1}/
@@ -25,8 +34,8 @@ class AddressExtractor
       BlockMatch.new($1, "#{$2} #{$3}")
     when /(\d+) (#{STREET_NAMES}) (#{STREET_SUFFIXES})/i
       AddressMatch.new($1, "#{$2} #{$3}")
-    when /at|, ([A-z ]+?) (#{STREET_SUFFIXES}) (?:at|and|near) ([A-z ]+?) (#{STREET_SUFFIXES})/i
-      IntersectionMatch.new("#{$1} #{$2}".strip, "#{$3} #{$4}".strip)
+    # when /at|, ([A-z ]+?) (#{STREET_SUFFIXES}) (?:at|and|near) ([A-z ]+?) (#{STREET_SUFFIXES})/i
+      # IntersectionMatch.new("#{$1} #{$2}".strip, "#{$3} #{$4}".strip)
     else
       NullMatch.new
     end
